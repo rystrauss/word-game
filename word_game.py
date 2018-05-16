@@ -1,6 +1,7 @@
 """A Mini Scrabble game, where two players are challenged to form words from letters."""
 import random
 import time
+import os
 
 
 def build_dictionary():
@@ -13,7 +14,7 @@ def build_dictionary():
     try:
         with open("scrabble_words.txt", "r") as file:
             for line in file:
-                if len(line.strip()) <= 10:
+                if len(line.strip()) <= NUM_LETTERS:
                     words[line.strip()[:1]].add(line.strip())
         return True
     except FileNotFoundError:
@@ -48,7 +49,7 @@ def get_letters():
     :returns: ten random letters from letter_bag as a list.
     """
     letters = []
-    for i in range(10):
+    for i in range(NUM_LETTERS):
         letters.append(random.choice(letter_bag))
     return letters
 
@@ -114,22 +115,29 @@ def start_game():
     letters = get_letters()
     p1_words = []
     p2_words = []
-    print("\nIn this game, you will be shown 10 letters, and you will have 15 seconds to"
-          "\nenter as many words as you can that can be formed from those letters.")
+    os.system("clear")
+    print("\nIn this game, you will be shown {} letters, and you will have {} seconds to"
+          "\nenter as many words as you can that can be formed from those letters.".format(NUM_LETTERS, TIME_LIMIT))
     input("\nPlayer 1, when you are ready to begin, press \"Enter\".")
+    os.system("clear")
     start_time = time.time()
-    while time.time() - start_time < 15:
+    while time.time() - start_time < TIME_LIMIT:
         print("\nThe letters are:", "".join(letters))
         temp = input("Enter a word: ").upper()
+        os.system("clear")
         if is_valid_word(temp, letters) and temp not in p1_words:
             p1_words.append(temp)
+    os.system("clear")
     input("\nTime Up. Player 2, when you are ready to begin, press \"Enter\".")
+    os.system("clear")
     start_time = time.time()
-    while time.time() - start_time < 15:
+    while time.time() - start_time < TIME_LIMIT:
         print("\nThe letters are:", "".join(letters))
         temp = input("Enter a word: ").upper()
+        os.system("clear")
         if is_valid_word(temp, letters) and temp not in p2_words:
             p2_words.append(temp)
+    os.system("clear")
     print("\nTime Up.\n")
     p1_score = 0
     p2_score = 0
@@ -147,6 +155,7 @@ def start_game():
     for word in p2_words:
         print(word)
     bar = input("\nTo see all possible words from these letters, enter \"A\", otherwise, just press \"Enter\": ")
+    os.system("clear")
     if bar.upper() == "A":
         computers_score = 0
         print("\n***ALL POSSIBLE WORDS WITH LETTERS \"{}\"***".format("".join(letters)))
@@ -177,6 +186,8 @@ def run():
 
 
 if __name__ == "__main__":
+    TIME_LIMIT = 20
+    NUM_LETTERS = 7
     words = {}
     letter_bag = []
     letter_values = {}
